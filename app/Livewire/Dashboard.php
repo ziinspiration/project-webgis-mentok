@@ -30,7 +30,8 @@ class Dashboard extends Component
                 ['label' => 'Data Point', 'value' => MapData::where('type', 'Point')->count(), 'icon' => 'point', 'color' => 'emerald'],
                 ['label' => 'Total Pengguna', 'value' => User::count(), 'icon' => 'users', 'color' => 'blue'],
             ],
-            'recentActivities' => Activity::latest()->limit(15)->get()
+            'recentActivities' => Activity::latest()->limit(15)->get(),
+            'allMapData' => MapData::all()
         ]);
     }
 }

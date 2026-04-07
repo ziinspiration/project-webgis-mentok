@@ -7,6 +7,7 @@ use App\Models\Activity;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryManager extends Component
 {
@@ -16,6 +17,14 @@ class CategoryManager extends Component
     protected $rules = [
         'name' => 'required|string|min:3|max:255',
     ];
+
+    public function logout()
+    {
+        Auth::logout();
+        session()->invalidate();
+        session()->regenerateToken();
+        return redirect()->route('login');
+    }
 
     public function updateOrder($items)
     {
@@ -39,7 +48,6 @@ class CategoryManager extends Component
     public function save()
     {
         $this->validate();
-
         $action = $this->selected_id ? 'Mengubah' : 'Menambah';
 
         if (!$this->selected_id) {
@@ -78,16 +86,14 @@ class CategoryManager extends Component
     public function delete($id)
     {
         $category = Category::findOrFail($id);
-
         Activity::create([
             'user_name' => auth()->user()->name,
             'action' => 'Menghapus',
             'subject' => $category->name,
             'type' => 'Kategori'
         ]);
-
         $category->delete();
-        $this->dispatch('notify', message: 'Kategori Berhasil Dihapus', type: 'error');
+        $this->dispatch('notify', message: 'Kategori dihapus', type: 'error');
     }
 
     #[Layout('layouts.apps')]

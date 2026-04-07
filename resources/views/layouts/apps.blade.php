@@ -7,11 +7,49 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         [x-cloak] { display: none !important; }
         .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15; z-index: 0; pointer-events: none; }
         .notification-glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+
+        .btn-3d-blue {
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; position: relative; outline: none;
+    transform: translateY(-4px);
+    transition: all 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: rgba(59, 130, 246, 0.2);
+    border: 1.2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
+}
+.btn-3d-blue:hover { transform: translateY(-2px); box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4); background: rgba(59, 130, 246, 0.3); }
+.btn-3d-blue:active { transform: translateY(0px); box-shadow: none; }
+
+.btn-3d-red {
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; position: relative; outline: none;
+    transform: translateY(-4px);
+    transition: all 0.1s;
+    background: rgba(239, 68, 68, 0.2);
+    border: 1.2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
+}
+.btn-3d-red:hover { transform: translateY(-2px); box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4); background: rgba(239, 68, 68, 0.3); }
+.btn-3d-red:active { transform: translateY(0px); box-shadow: none; }
+
+.btn-3d-slate {
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; position: relative; outline: none;
+    transform: translateY(-4px);
+    transition: all 0.1s;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1.2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
+}
+.btn-3d-slate:hover { transform: translateY(-2px); box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4); background: rgba(255, 255, 255, 0.1); }
+.btn-3d-slate:active { transform: translateY(0px); box-shadow: none; }
     </style>
 </head>
 <body class="bg-slate-950 antialiased overflow-hidden text-left"

@@ -7,7 +7,6 @@ use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 
 class Login extends Component
 {
@@ -20,42 +19,29 @@ class Login extends Component
         $this->showPassword = !$this->showPassword;
     }
 
-    protected function throttleKey()
-    {
-        return Str::lower($this->nip) . '|' . request()->ip();
-    }
-
     public function login()
     {
-        $this->validate([
-            'nip' => 'required|string',
-            'password' => 'required|string',
-        ]);
+        $this->validate(['nip' => 'required', 'password' => 'required']);
 
-        if (RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
-            $seconds = RateLimiter::availableIn($this->throttleKey());
-
-            $this->dispatch(
-                'login-failed',
-                message: "Terlalu banyak percobaan. Silakan coba lagi dalam $seconds detik."
-            );
+        $throttleKey = Str::lower($this->nip) . '|' . request()->ip();
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $this->dispatch('login-failed', message: 'Terlalu banyak percobaan. Coba lagi nanti.');
             return;
         }
 
-        if (Auth::attempt(['nip' => $this->nip, 'password' => $this->password])) {
-            RateLimiter::clear($this->throttleKey());
-
+        if (Auth::attempt([
+            'nip' => $this->nip,
+            'password' => $this->password,
+            'is_active' => 1,
+            'is_verified' => 1
+        ])) {
+            RateLimiter::clear($throttleKey);
             session()->regenerate();
-
             return redirect()->intended('dashboard');
         }
 
-        RateLimiter::hit($this->throttleKey(), 60);
-
-        $this->dispatch(
-            'login-failed',
-            message: 'NIP atau Kata Sandi yang anda masukkan tidak terdaftar di sistem kami.'
-        );
+        RateLimiter::hit($throttleKey);
+        $this->dispatch('login-failed', message: 'Akses ditolak. NIP/Sandi salah atau akun tidak aktif.');
     }
 
     #[Layout('layouts.app')]

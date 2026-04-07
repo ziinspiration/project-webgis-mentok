@@ -19,29 +19,35 @@ class User extends Authenticatable
         'nip',
         'email',
         'password',
+        'is_verified',
+        'is_allaccess',
+        'is_active',
+        'token'
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
-            }
-        });
-    }
 
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            if (empty($model->id)) {
+                $model->id = (string) Str::uuid();
+            }
+        });
+    }
+
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_verified' => 'boolean',
+            'is_allaccess' => 'boolean',
+            'is_active' => 'boolean',
         ];
     }
 }
