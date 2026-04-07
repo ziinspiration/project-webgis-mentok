@@ -10,7 +10,7 @@ class MapData extends Model
 {
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $fillable = ['category_id', 'name', 'type', 'geojson_path', 'icon_path'];
+    protected $fillable = ['category_id', 'name', 'type', 'geojson_path', 'icon_path', 'sort_order'];
 
     protected static function boot()
     {

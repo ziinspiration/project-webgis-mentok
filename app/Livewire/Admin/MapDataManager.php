@@ -52,6 +52,11 @@ class MapDataManager extends Component
         $action = $this->selected_id ? 'Mengubah' : 'Menambah';
         $data = ['name' => $this->name, 'category_id' => $this->category_id, 'type' => $this->type];
 
+        if (!$this->selected_id) {
+            $maxOrder = MapData::where('category_id', $this->category_id)->max('sort_order');
+            $data['sort_order'] = $maxOrder + 1;
+        }
+
         if ($this->geojson_file) {
             $data['geojson_path'] = $this->geojson_file->store('geojson', 'public');
         }
@@ -63,6 +68,14 @@ class MapDataManager extends Component
         Activity::create(['user_name' => auth()->user()->name, 'action' => $action, 'subject' => $this->name, 'type' => 'Data Spasial']);
         $this->dispatch('notify', message: "Data Berhasil $action", type: 'success');
         $this->closeModal();
+    }
+
+    public function updateOrder($items)
+    {
+        foreach ($items as $item) {
+            MapData::where('id', $item['value'])->update(['sort_order' => $item['order']]);
+        }
+        $this->dispatch('notify', message: "Urutan data diperbarui", type: 'success');
     }
 
     public function edit($id)
@@ -88,13 +101,16 @@ class MapDataManager extends Component
     #[Layout('layouts.apps')]
     public function render()
     {
-        $query = MapData::with('category')->latest();
-        if ($this->search) $query->where('name', 'like', '%' . $this->search . '%');
-        if ($this->filterCategory) $query->where('category_id', $this->filterCategory);
-        if ($this->filterType) $query->where('type', $this->filterType);
+        $categories = Category::with(['mapData' => function ($q) {
+            $q->orderBy('sort_order', 'asc');
+            if ($this->search) $q->where('name', 'like', '%' . $this->search . '%');
+            if ($this->filterType) $q->where('type', $this->filterType);
+        }])->orderBy('sort_order', 'asc');
+
+        if ($this->filterCategory) $categories->where('id', $this->filterCategory);
 
         return view('livewire.admin.map-data-manager', [
-            'allData' => $query->get(),
+            'groupedData' => $categories->get(),
             'categories' => Category::orderBy('sort_order', 'asc')->get()
         ]);
     }

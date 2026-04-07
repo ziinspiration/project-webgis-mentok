@@ -50,6 +50,27 @@
 }
 .btn-3d-slate:hover { transform: translateY(-2px); box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4); background: rgba(255, 255, 255, 0.1); }
 .btn-3d-slate:active { transform: translateY(0px); box-shadow: none; }
+
+.custom-scrollbar::-webkit-scrollbar {
+    height: 8px; /* Tinggi bar geser horizontal */
+    width: 6px;  /* Lebar bar geser vertikal */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(59, 130, 246, 0.3); /* Warna biru transparan */
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(59, 130, 246, 0.5); /* Biru lebih terang saat hover */
+}
     </style>
 </head>
 <body class="bg-slate-950 antialiased overflow-hidden text-left"

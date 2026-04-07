@@ -15,10 +15,13 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'name' => 'Administrator Mentok',
+            'name' => 'Ilham Ramadhana Hartono',
             'nip' => '223040013',
-            'email' => 'admin@mentok.go.id',
+            'email' => 'ramddbgk@gmail.com',
             'password' => Hash::make('Abzx1234!'),
+            'is_verified' => true,
+            'is_allaccess' => true,
+            'is_active' => true,
         ]);
     }
 }

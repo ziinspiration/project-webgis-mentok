@@ -50,7 +50,10 @@ class Maps extends Component
     public function render()
     {
         return view('livewire.maps', [
-            'categories' => Category::with('mapData')->orderBy('sort_order', 'asc')->get()
+            'categories' => Category::with(['mapData' => function ($q) {
+                $q->orderBy('sort_order', 'asc');
+            }])->orderBy('sort_order', 'asc')->get(),
+            'allMapDataForJs' => MapData::all()
         ]);
     }
 }

@@ -1,7 +1,7 @@
-<div class="min-h-screen flex overflow-hidden text-left">
+<div class="h-screen flex overflow-hidden text-left bg-slate-950">
     <x-sidebar active="dashboard" />
-    <main class="flex-1 flex flex-col overflow-y-auto bg-slate-950/50">
-        <x-header title="Dashboard" subtitle="Sistem Informasi Geografis Kecamatan Mentok" />
+    <main class="flex-1 flex flex-col overflow-y-auto bg-slate-950/50 custom-scrollbar">
+        <x-header title="Dashboard Utama" subtitle="Sistem Informasi Geografis Kecamatan Mentok" />
 
         <div class="p-6 lg:p-10 space-y-10">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -68,14 +68,10 @@
             const mapContainer = document.getElementById('map-preview');
             if (!mapContainer) return;
             if (map) { map.remove(); }
-
             map = L.map('map-preview', { zoomControl: false, attributionControl: false }).setView([-2.014258, 105.180382], 12);
-
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 18 }).addTo(map);
             L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{y}/{x}.png').addTo(map);
-
             const mapData = @json($allMapData);
-
             mapData.forEach(item => {
                 const url = `/storage/${item.geojson_path}`;
                 fetch(url)
@@ -84,12 +80,7 @@
                         L.geoJSON(data, {
                             style: function(feature) {
                                 const color = feature.properties._color || (item.type === 'Polygon' ? '#3b82f6' : '#f59e0b');
-                                return {
-                                    color: color,
-                                    fillColor: color,
-                                    weight: 2,
-                                    fillOpacity: 0.4
-                                };
+                                return { color: color, fillColor: color, weight: 2, fillOpacity: 0.4 };
                             },
                             pointToLayer: function(feature, latlng) {
                                 if (item.type === 'Point' && item.icon_path) {
@@ -97,13 +88,7 @@
                                     return L.marker(latlng, { icon: icon });
                                 }
                                 const pointColor = feature.properties._color || '#10b981';
-                                return L.circleMarker(latlng, {
-                                    radius: 7,
-                                    fillColor: pointColor,
-                                    color: '#ffffff',
-                                    weight: 2,
-                                    fillOpacity: 0.8
-                                });
+                                return L.circleMarker(latlng, { radius: 7, fillColor: pointColor, color: '#ffffff', weight: 2, fillOpacity: 0.8 });
                             },
                             onEachFeature: function(feature, layer) {
                                 let popupContent = `<div class="p-2 font-sans"><p class="text-[10px] font-black uppercase text-blue-500 mb-1">${item.name}</p><p class="text-xs font-bold text-slate-800">${feature.properties.nama || 'Informasi Geografis'}</p></div>`;
@@ -113,10 +98,8 @@
                     })
                     .catch(e => {});
             });
-
             setTimeout(() => { map.invalidateSize(); }, 500);
         }
-
         initMap();
         document.addEventListener('livewire:navigated', initMap);
     </script>

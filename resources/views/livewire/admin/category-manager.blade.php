@@ -1,8 +1,8 @@
-<div class="min-h-screen text-slate-200 flex overflow-hidden relative z-10 text-left"
+<div class="h-screen text-slate-200 flex overflow-hidden relative z-10 text-left"
      x-data="{ confirmDelete: false, deleteId: null }"
      x-on:open-delete-modal.window="confirmDelete = true; deleteId = $event.detail.id">
     <x-sidebar active="categories" />
-    <main class="flex-1 flex flex-col overflow-y-auto w-full">
+    <main class="flex-1 flex flex-col overflow-y-auto w-full custom-scrollbar">
         <x-header title="Kelola Kategori" subtitle="Manajemen Klasifikasi Data Geografis" />
         <div class="p-4 sm:p-6 lg:p-8">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-10">
@@ -14,9 +14,9 @@
                 </div>
                 <button wire:click="openModal" class="w-full sm:w-fit btn-3d-blue px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest text-blue-400">+ Tambah Kategori</button>
             </div>
-            <div class="glass-card rounded-[30px] sm:rounded-[40px] overflow-hidden border border-white/5">
-                <div class="overflow-x-auto w-full custom-scrollbar">
-                    <table class="w-full text-left border-collapse min-w-[600px]">
+            <div class="glass-card rounded-[30px] sm:rounded-[40px] overflow-hidden border border-white/5 mb-20">
+                <div class="overflow-x-auto w-full max-w-full custom-scrollbar">
+                    <table class="w-full text-left border-collapse min-w-[800px]">
                         <thead>
                             <tr class="bg-white/5 border-b border-white/5">
                                 <th class="px-8 py-6 text-[10px] font-black uppercase tracking-[0.3em] text-white/30 w-24">Urutan</th>

@@ -1,8 +1,8 @@
-<div class="min-h-screen flex overflow-hidden">
+<div class="h-screen flex overflow-hidden bg-slate-950">
     <x-sidebar active="users" />
-    <main class="flex-1 flex flex-col overflow-y-auto bg-slate-950/50 text-left">
+    <main class="flex-1 flex flex-col overflow-y-auto bg-slate-950/50 text-left custom-scrollbar">
         <x-header title="Kelola Pengguna" subtitle="Manajemen Hak Akses & Keamanan Sistem" />
-        <div class="p-6 lg:p-10">
+        <div class="p-6 lg:p-10 pb-20">
             <div class="flex flex-col md:flex-row justify-between items-center gap-6 mb-12">
                 <div class="relative group w-full max-w-lg">
                     <div class="absolute left-6 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-blue-500 transition-colors">
@@ -14,10 +14,9 @@
                     + Daftarkan Admin Baru
                 </button>
             </div>
-
             <div class="glass-card rounded-[40px] overflow-hidden border border-white/5">
-                <div class="overflow-x-auto w-full custom-scrollbar">
-                    <table class="w-full border-collapse min-w-[1000px]">
+           <div class="overflow-x-auto w-full max-w-full custom-scrollbar">
+                    <table class="w-full border-collapse min-w-[1100px]">
                         <thead>
                             <tr class="bg-white/5 border-b border-white/5">
                                 <th class="px-8 py-7 text-[10px] font-black uppercase tracking-widest text-white/30">Identitas Personal</th>
@@ -74,8 +73,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Modal User Manager -->
         @if($isModalOpen)
         <div class="fixed inset-0 z-[2000] flex items-center justify-center p-4">
             <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md" wire:click="closeModal"></div>
