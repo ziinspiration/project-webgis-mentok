@@ -10,17 +10,21 @@
                         <div class="text-left">
                             <label class="text-[10px] font-black uppercase tracking-widest text-white/30 ml-5 mb-3 block">Nama Lengkap</label>
                             <input type="text" wire:model="name" class="bg-black/30 border border-white/5 w-full px-7 py-5 rounded-2xl text-white focus:outline-none focus:border-blue-500/30 shadow-inner font-bold">
+                            @error('name') <span class="text-red-500 text-[10px] ml-5 mt-2 block font-bold uppercase tracking-widest">{{ $message }}</span> @enderror
                         </div>
                         <div class="text-left">
                             <label class="text-[10px] font-black uppercase tracking-widest text-white/30 ml-5 mb-3 block">NIP / Identitas</label>
-                            <input type="text" wire:model="nip" class="bg-black/30 border border-white/5 w-full px-7 py-5 rounded-2xl text-white focus:outline-none focus:border-blue-500/30 shadow-inner font-mono font-bold">
+                            <input type="text" wire:model="nip" {{ !auth()->user()->is_allaccess ? 'readonly' : '' }}
+                                class="w-full px-7 py-5 rounded-2xl focus:outline-none shadow-inner font-mono font-bold transition-all
+                                {{ !auth()->user()->is_allaccess ? 'bg-white/[0.02] border-transparent text-white/20 cursor-not-allowed select-none' : 'bg-black/30 border-white/5 text-white focus:border-blue-500/30' }}">
+                            @error('nip') <span class="text-red-500 text-[10px] ml-5 mt-2 block font-bold uppercase tracking-widest">{{ $message }}</span> @enderror
                         </div>
                         <div class="text-left">
                             <label class="text-[10px] font-black uppercase tracking-widest text-white/30 ml-5 mb-3 block">Email Aktif</label>
-                            <input type="email" wire:model="email" class="bg-black/30 border border-white/5 w-full px-7 py-5 rounded-2xl text-white focus:outline-none focus:border-blue-500/30 shadow-inner font-bold">
-                        </div>
-                        <div class="bg-blue-500/5 border border-blue-500/10 p-5 rounded-2xl">
-                            <p class="text-[9px] text-blue-400 italic font-black uppercase tracking-widest leading-loose">Informasi: Perubahan data email atau NIP akan mewajibkan verifikasi ulang akses.</p>
+                            <input type="email" wire:model="email" {{ !auth()->user()->is_allaccess ? 'readonly' : '' }}
+                                class="w-full px-7 py-5 rounded-2xl focus:outline-none shadow-inner font-bold transition-all
+                                {{ !auth()->user()->is_allaccess ? 'bg-white/[0.02] border-transparent text-white/20 cursor-not-allowed select-none' : 'bg-black/30 border-white/5 text-white focus:border-blue-500/30' }}">
+                            @error('email') <span class="text-red-500 text-[10px] ml-5 mt-2 block font-bold uppercase tracking-widest">{{ $message }}</span> @enderror
                         </div>
                        <button type="submit" wire:loading.attr="disabled" class="btn-3d-blue w-full py-5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-blue-400">
                             <span wire:loading.remove wire:target="updateProfile">Update Data Profil</span>

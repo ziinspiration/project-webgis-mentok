@@ -53,14 +53,13 @@ class CategoryManager extends Component
         if (!$this->selected_id) {
             $lastOrder = Category::max('sort_order') ?? 0;
             Category::create([
+                'user_id' => auth()->id(),
                 'name' => $this->name,
-                'slug' => Str::slug($this->name),
                 'sort_order' => $lastOrder + 1
             ]);
         } else {
             Category::where('id', $this->selected_id)->update([
                 'name' => $this->name,
-                'slug' => Str::slug($this->name),
             ]);
         }
 

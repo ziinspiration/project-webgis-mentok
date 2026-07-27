@@ -52,8 +52,8 @@
 .btn-3d-slate:active { transform: translateY(0px); box-shadow: none; }
 
 .custom-scrollbar::-webkit-scrollbar {
-    height: 8px; /* Tinggi bar geser horizontal */
-    width: 6px;  /* Lebar bar geser vertikal */
+    height: 8px;
+    width: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
@@ -62,14 +62,14 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(59, 130, 246, 0.3); /* Warna biru transparan */
+    background: rgba(59, 130, 246, 0.3);
     border-radius: 10px;
     border: 2px solid transparent;
     background-clip: content-box;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(59, 130, 246, 0.5); /* Biru lebih terang saat hover */
+    background: rgba(59, 130, 246, 0.5);
 }
     </style>
 </head>

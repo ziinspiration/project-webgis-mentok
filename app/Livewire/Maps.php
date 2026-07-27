@@ -11,7 +11,7 @@ class Maps extends Component
 {
     public $showSidebar = false;
     public $activeLayer = 'satellite';
-    public $activeGeojsons = []; // Menyimpan ID data yang sedang ON
+    public $activeGeojsons = [];
 
     public function toggleSidebar()
     {
@@ -31,11 +31,9 @@ class Maps extends Component
 
         if (in_array($id, $this->activeGeojsons)) {
             $this->activeGeojsons = array_diff($this->activeGeojsons, [$id]);
-            // Beritahu JS untuk menghapus layer
             $this->dispatch('remove-layer', id: $id);
         } else {
             $this->activeGeojsons[] = $id;
-            // Beritahu JS untuk menambah layer
             $this->dispatch(
                 'add-layer',
                 id: $id,

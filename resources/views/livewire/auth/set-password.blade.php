@@ -26,7 +26,7 @@
 
         <div class="text-center mb-10 md:mb-14 relative z-10">
             <h2 class="text-2xl md:text-3xl font-black italic tracking-tighter text-white uppercase w-fit px-6 border-x border-white/10 mb-4 mx-auto">
-                ATUR <span class="text-blue-500">ULANG SANDI</span>
+                ATUR <span class="text-blue-500">KATA SANDI</span>
             </h2>
             <p class="text-[10px] md:text-[11px] font-bold text-white/30 uppercase tracking-[0.3em]">KONFIGURASI SANDI BARU</p>
         </div>

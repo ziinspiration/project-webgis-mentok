@@ -31,20 +31,41 @@ class Profile extends Component
 
     public function updateProfile()
     {
-        $this->validate([
-            'name' => 'required|string|max:255',
-            'nip' => 'required|string|unique:users,nip,' . auth()->id(),
-            'email' => 'required|email|unique:users,email,' . auth()->id(),
-        ]);
+        $user = auth()->user();
 
-        $user = User::find(auth()->id());
+        if (!$user->is_allaccess) {
+            $this->nip = $user->nip;
+            $this->email = $user->email;
+            $this->validate([
+                'name' => 'required|string|max:255',
+            ]);
+        } else {
+            $this->validate([
+                'name' => 'required|string|max:255',
+                'nip' => 'required|string|unique:users,nip,' . $user->id,
+                'email' => 'required|email|unique:users,email,' . $user->id,
+            ]);
+        }
+
+        $isSensitiveChange = ($user->nip !== $this->nip || $user->email !== $this->email);
+
         $user->update([
             'name' => $this->name,
             'nip' => $this->nip,
             'email' => $this->email,
         ]);
 
-        Activity::create(['user_name' => $this->name, 'action' => 'Mengubah', 'subject' => 'Profil Pribadi', 'type' => 'Keamanan']);
+        Activity::create([
+            'user_name' => $this->name,
+            'action' => 'Mengubah',
+            'subject' => 'Profil Pribadi',
+            'type' => 'Keamanan'
+        ]);
+
+        if ($isSensitiveChange) {
+            return $this->logout();
+        }
+
         $this->dispatch('notify', message: 'Profil berhasil diperbarui', type: 'success');
     }
 
@@ -61,6 +82,7 @@ class Profile extends Component
             "Kami menerima permintaan perubahan kata sandi dari profil anda. Klik tombol di bawah ini untuk memverifikasi tindakan ini demi keamanan akun anda.",
             $url
         );
+
         $this->dispatch('notify', message: 'Link verifikasi dikirim ke email anda', type: 'success');
     }
 

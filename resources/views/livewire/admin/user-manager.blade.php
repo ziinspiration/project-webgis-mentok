@@ -20,7 +20,7 @@
                         <thead>
                             <tr class="bg-white/5 border-b border-white/5">
                                 <th class="px-8 py-7 text-[10px] font-black uppercase tracking-widest text-white/30">Identitas Personal</th>
-                                <th class="px-8 py-7 text-[10px] font-black uppercase tracking-widest text-white/30 text-center">Status Akun</th>
+                                <th class="px-8 py-7 text-[10px] font-black uppercase tracking-widest text-white/30 text-center">Status</th>
                                 <th class="px-8 py-7 text-[10px] font-black uppercase tracking-widest text-white/30 text-center">Otoritas</th>
                                 <th class="px-8 py-7 text-[10px] font-black uppercase tracking-widest text-white/30 text-right">Kelola</th>
                             </tr>

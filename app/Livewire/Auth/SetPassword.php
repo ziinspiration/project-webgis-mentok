@@ -9,6 +9,7 @@ use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Str;
 
 class SetPassword extends Component
 {
@@ -44,7 +45,7 @@ class SetPassword extends Component
             'password' => Hash::make($this->password),
             'is_verified' => 1,
             'is_active' => 1,
-            'token' => null
+            'token' => Str::random(64)
         ]);
 
         Activity::create([

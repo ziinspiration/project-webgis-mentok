@@ -35,7 +35,7 @@ class User extends Authenticatable
         parent::boot();
         static::creating(function ($model) {
             if (empty($model->id)) {
-                $model->id = (string) Str::uuid();
+                $model->id = 'usr-' . Str::random(32);
             }
         });
     }
@@ -49,5 +49,15 @@ class User extends Authenticatable
             'is_allaccess' => 'boolean',
             'is_active' => 'boolean',
         ];
+    }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
+
+    public function mapData()
+    {
+        return $this->hasMany(MapData::class);
     }
 }

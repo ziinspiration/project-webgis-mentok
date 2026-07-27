@@ -10,6 +10,7 @@ use Livewire\WithFileUploads;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class MapDataManager extends Component
 {
@@ -48,27 +49,55 @@ class MapDataManager extends Component
 
     public function save()
     {
-        $this->validate($this->selected_id ? array_merge($this->rules, ['geojson_file' => 'nullable']) : $this->rules);
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'type' => 'required|in:Point,Line,Polygon',
+            'geojson_file' => $this->selected_id ? 'nullable|file|mimes:json,geojson|max:10240' : 'required|file|mimes:json,geojson|max:10240',
+            'icon_file' => 'nullable|image|max:1024',
+        ]);
+
         $action = $this->selected_id ? 'Mengubah' : 'Menambah';
-        $data = ['name' => $this->name, 'category_id' => $this->category_id, 'type' => $this->type];
+
+        $data = [
+            'name' => $this->name,
+            'category_id' => $this->category_id,
+            'type' => $this->type,
+            'user_id' => auth()->id(),
+        ];
 
         if (!$this->selected_id) {
             $maxOrder = MapData::where('category_id', $this->category_id)->max('sort_order');
-            $data['sort_order'] = $maxOrder + 1;
+            $data['sort_order'] = ($maxOrder ?? 0) + 1;
         }
 
         if ($this->geojson_file) {
             $data['geojson_path'] = $this->geojson_file->store('geojson', 'public');
         }
+
         if ($this->type === 'Point' && $this->icon_file) {
             $data['icon_path'] = $this->icon_file->store('icons', 'public');
+        } elseif (!$this->selected_id) {
+            $data['icon_path'] = '';
         }
 
-        MapData::updateOrCreate(['id' => $this->selected_id], $data);
-        Activity::create(['user_name' => auth()->user()->name, 'action' => $action, 'subject' => $this->name, 'type' => 'Data Spasial']);
+        if ($this->selected_id) {
+            MapData::where('id', $this->selected_id)->update($data);
+        } else {
+            MapData::create($data);
+        }
+
+        Activity::create([
+            'user_name' => auth()->user()->name,
+            'action' => $action,
+            'subject' => $this->name,
+            'type' => 'Data Spasial'
+        ]);
+
         $this->dispatch('notify', message: "Data Berhasil $action", type: 'success');
         $this->closeModal();
     }
+
 
     public function updateOrder($items)
     {

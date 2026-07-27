@@ -34,7 +34,6 @@
                                 </td>
                                 <td class="px-8 py-6">
                                     <p class="font-black italic text-white tracking-tighter text-lg uppercase">{{ $cat->name }}</p>
-                                    <p class="text-[9px] font-mono text-white/20 uppercase tracking-widest mt-1">Slug: {{ $cat->slug }}</p>
                                 </td>
                                 <td class="px-8 py-6 text-right whitespace-nowrap">
                                     <div class="flex items-center justify-end gap-3">

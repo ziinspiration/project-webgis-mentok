@@ -14,6 +14,6 @@ class Activity extends Model
     protected static function boot()
     {
         parent::boot();
-        static::creating(fn($model) => $model->id = (string) Str::uuid());
+        static::creating(fn($model) => $model->id = 'act-' . Str::random(32));
     }
 }

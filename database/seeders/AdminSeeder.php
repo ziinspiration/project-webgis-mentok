@@ -5,13 +5,10 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Str;
 
 class AdminSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         User::create([
@@ -22,6 +19,8 @@ class AdminSeeder extends Seeder
             'is_verified' => true,
             'is_allaccess' => true,
             'is_active' => true,
+            'token' => Str::random(64),
+            'email_verified_at' => now(),
         ]);
     }
 }

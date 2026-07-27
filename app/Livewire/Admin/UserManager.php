@@ -10,6 +10,7 @@ use Livewire\Attributes\Layout;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class UserManager extends Component
 {
@@ -23,6 +24,13 @@ class UserManager extends Component
         session()->invalidate();
         session()->regenerateToken();
         return redirect()->route('login');
+    }
+
+    private function forceLogoutUser($userId)
+    {
+        DB::table('sessions')->where('user_id', $userId)->delete();
+
+        User::where('id', $userId)->update(['remember_token' => Str::random(60)]);
     }
 
     public function mount()
@@ -78,12 +86,20 @@ class UserManager extends Component
             $actionLog = "Menambah";
         } else {
             $user = User::find($this->selected_id);
+
+            $mustLogout = ($user->nip !== $this->nip || $user->email !== $this->email);
+
             $user->update([
                 'name' => $this->name,
                 'nip' => $this->nip,
                 'email' => $this->email
             ]);
-            $msg = "Data pengguna berhasil diperbarui";
+
+            if ($mustLogout) {
+                $this->forceLogoutUser($user->id);
+            }
+
+            $msg = "Data pengguna berhasil diperbarui" . ($mustLogout ? " (Sesi user direset)" : "");
             $actionLog = "Mengubah Profil";
         }
 
@@ -99,6 +115,8 @@ class UserManager extends Component
         $user->is_active = !$user->is_active;
         $user->save();
 
+        $this->forceLogoutUser($user->id);
+
         Activity::create([
             'user_name' => auth()->user()->name,
             'action' => $user->is_active ? 'Mengaktifkan' : 'Menonaktifkan',
@@ -106,7 +124,7 @@ class UserManager extends Component
             'type' => 'Pengguna'
         ]);
 
-        $this->dispatch('notify', message: 'Status akun diperbarui', type: 'success');
+        $this->dispatch('notify', message: 'Status akun diperbarui & sesi direset', type: 'success');
     }
 
     public function toggleAccess($id)
@@ -116,6 +134,8 @@ class UserManager extends Component
         $user->is_allaccess = !$user->is_allaccess;
         $user->save();
 
+        $this->forceLogoutUser($user->id);
+
         Activity::create([
             'user_name' => auth()->user()->name,
             'action' => 'Ubah Akses',
@@ -123,7 +143,7 @@ class UserManager extends Component
             'type' => 'Pengguna'
         ]);
 
-        $this->dispatch('notify', message: 'Hak akses diperbarui', type: 'success');
+        $this->dispatch('notify', message: 'Hak akses diperbarui & sesi direset', type: 'success');
     }
 
     public function edit($id)
